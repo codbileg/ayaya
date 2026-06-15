@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9/11 Storytelling</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{background:#000;
+  color:#fff;
+  font-family:Arial,
+  sans-serif;
+  overflow:hidden;
+  cursor:none}
+
+.scene{position:fixed;
+  inset:0;
+  display:none}
+
+.scene.active{display:flex}
+
+#cursor{width:18px;
+  height:18px;
+  background:blueviolet;
+  border-radius:50%;
+  position:fixed;
+  pointer-events:none;
+  filter:blur(8px);
+  box-shadow:0 0 20px blue,0 0 40px blue;
+  z-index:9999}
+
+.center{justify-content:center;
+  align-items:center}
+
+#intro{background:#07284f;
+  color:white;
+  font-size:24px}
+
+.glitch{animation:g .25s 4}
+
+@keyframes g{0%{transform:translateX(0)}50%{transform:translateX(8px)}100%{transform:translateX(-8px)}}
+
+#scene1{background:#820000;overflow:hidden}
+
+#sky{position:absolute;
+  width:100%;
+  height:100%;
+  object-fit:full;}
+
+#ny{position:absolute;
+  width:100%;
+  height:80%;
+  object-fit:100%;
+  bottom:-100%;
+  transition:3s}
+
+#caption{position:absolute;
+  top:30px;
+  left:30px;
+  font-size:30px}
+
+.split{display:flex;
+  width:100%;
+  height:100%}
+
+.split img{width:50%;
+  height:100%;
+  object-fit:cover}
+
+.text{background:#07284f;
+  width:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px;
+  font-size:24px}
+
+#fade{position:fixed;
+  inset:0;
+  background:#051a33;
+  opacity:0;
+  pointer-events:none;
+  transition:1s;
+  z-index:9000}
+
+#scene3 .textcol{width:50%;
+  padding:80px; 
+  background:#07284f;}
+#scene3 h1{font-size:50px;
+  padding:40px;}
+#scene3 p{align-items:center;
+  justify-content:center;
+  font-size:24px;
+  padding:40px;
+  display:flex;
+  color:#ccc;}
+#scene3 img{width:50%;
+  height:100%;
+  object-fit:cover}
+.shake{animation:s .8s}
+
+@keyframes s{0%,100%{transform:translate(0)}25%{transform:translate(-8px,3px)}50%{transform:translate(8px,-3px)}}
+
+#scene4{flex-direction:column;
+  padding:40px;
+  background: #07284f;}
+
+.timeline{display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:20px}
+.timeline button{padding:15px 30px;
+  margin: 20px 50px;
+  cursor:pointer;
+  color:white;
+  background: #0d3b72;
+  backdrop-filter: border-box;}
+
+#event{flex:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s}
+#event img{max-width:80%;max-height:60vh;object-fit:contain}
+#event h2{margin:10px}
+
+#scene5{background:#820000;overflow:hidden}
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="fade"></div>
+
+<div id="intro" class="scene active center"><h1 id="typing"></h1></div>
+
+<div id="scene1" class="scene">
+<img id="sky" src="sky1.jpg">
+<img id="ny" src="city.png">
+<div id="caption">It was just another Tuesday.</div>
+</div>
+
+<div id="scene2" class="scene">
+<div class="split">
+<img src="office.jpg">
+<div class="text">Another ordinary day of work was getting underway.</div>
+</div>
+</div>
+
+<div id="scene3" class="scene">
+<div class="split">
+<div class="textcol">
+<h1>Then everything changed.</h1>
+<p>None of them knew they were living through the final moments of a normal morning.</p>
+</div>
+<img src="wtc.jpg">
+</div>
+</div>
+
+<div id="scene4" class="scene activeX">
+
+<div class="timeline">
+<button onclick="showEvent('8:46 AM','North Tower Struck','846.jpg')">8:46 AM</button>
+<button onclick="showEvent('9:03 AM','South Tower Struck','903.jpg')">9:03 AM</button>
+<button onclick="showEvent('9:37 AM','Pentagon Attacked','937.jpg')">9:37 AM</button>
+<button onclick="showEvent('9:59 AM','South Tower Collapses','959.jpg')">9:59 AM</button>
+<button onclick="showEvent('10:03 AM','Flight 93 Crashes in Pennsylvania','1003.jpg')">10:03 AM</button>
+<button onclick="showEvent('10:28 AM','North Tower Collapses','1028.jpg')">10:28 AM</button>
+</div>
+
+<div id="event">
+<h2>8:46 AM - North Tower Struck</h2>
+<img src="846.jpg">
+</div>
+</div>
+
+<div id="scene5" class="scene">
+<div class="split">
+<div class="textcol">
+<h1>Then everything changed.</h1>
+<p>None of them knew they were living through the final moments of a normal morning.</p>
+</div>
+<img src="wtc.jpg">
+</div>
+</div>
+
+
+<script>
+const cursor=document.getElementById('cursor');
+document.addEventListener('mousemove',e=>{
+cursor.style.left=e.clientX+'px';
+cursor.style.top=e.clientY+'px';
+});
+
+const txt="2001/09/11 New York City";
+let i=0;
+function type(){
+ if(i<txt.length){typing.textContent+=txt[i++];setTimeout(type,90);}
+ else setTimeout(startScene1,500);
+}
+type();
+
+function startScene1(){
+ intro.classList.add('glitch');
+ setTimeout(()=>{
+   intro.style.display='none';
+   scene1.classList.add('active');
+   setTimeout(()=>{ny.style.bottom='0';},100);
+ },700);
+}
+
+let scene=1,busy=false;
+window.addEventListener('wheel',()=>{
+ if(busy) return;
+ busy=true;
+ if(scene===1){go(1,2);}
+ else if(scene===2){
+   fade.style.opacity=1;
+   setTimeout(()=>{go(2,3);fade.style.opacity=0;},1000);
+ }
+ else if(scene===3){
+   document.getElementById('scene3').classList.add('shake');
+   setTimeout(()=>go(3,4),500);
+ }
+ setTimeout(()=>busy=false,1500);
+});
+
+function go(a,b){
+ document.getElementById('scene'+a).classList.remove('active');
+ document.getElementById('scene'+b).classList.add('active');
+ scene=b;
+}
+
+function showEvent(time,title,img){
+ const e=document.getElementById('event');
+ e.style.opacity=0;
+ setTimeout(()=>{
+   e.innerHTML='<h2>'+time+' - '+title+'</h2><img src="'+img+'">';
+   e.style.opacity=1;
+ },300);
+}
+</script>
+</body>
+</html>
